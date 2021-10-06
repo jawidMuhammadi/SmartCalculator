@@ -25,18 +25,25 @@ class CustomNumericKeyboard constructor(
         LayoutInflater.from(context), this, true
     )
 
+    private var clickListener: OnCustomNumericKeyboardClickListener? = null
+
     init {
         binding.apply {
-            adapter.itemClickListener = { clickedKey ->
-                Toast.makeText(context, "Clicked Key: $clickedKey", Toast.LENGTH_SHORT).show()
+            adapter.itemClickListener = { clickedKeyValue ->
+                clickListener?.onKeyClicked(clickedKeyValue)
             }
             rvKeyboard.adapter = adapter
         }
     }
 
+    fun setOnKeyClickListener(clickListener: OnCustomNumericKeyboardClickListener) {
+        this.clickListener = clickListener
+    }
 
+    /**
+     * A recycler view adapter class for displaying numbers
+     */
     internal class CustomNumericKeyboardAdapter : RecyclerView.Adapter<CustomNumericKeyboardVH>() {
-
         private val numberList = listOf(
             "7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "00", "."
         )
@@ -75,5 +82,9 @@ class CustomNumericKeyboard constructor(
         fun bind(item: String) {
             binding.tvNumber.text = item
         }
+    }
+
+    interface OnCustomNumericKeyboardClickListener {
+        fun onKeyClicked(value: String)
     }
 }

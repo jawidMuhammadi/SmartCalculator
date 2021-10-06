@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.spotlightapps.simplecalculator.R
 import com.spotlightapps.simplecalculator.databinding.FragmentCalculatorBinding
+import com.spotlightapps.simplecalculator.utils.CustomNumericKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -30,8 +29,11 @@ class CalculatorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        view.findViewById<Button>(R.id.button_first).setOnClickListener {
-//            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-//        }
+        binding.customNumericKeyboard.setOnKeyClickListener(object :
+            CustomNumericKeyboard.OnCustomNumericKeyboardClickListener {
+            override fun onKeyClicked(value: String) {
+                Toast.makeText(context, "Clicked Key $value", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
