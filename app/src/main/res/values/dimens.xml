@@ -1,3 +1,5 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="keyboard_numbers_size">34sp</dimen>
+    <dimen name="keyboard_numbers_padding">16dp</dimen>
 </resources>
