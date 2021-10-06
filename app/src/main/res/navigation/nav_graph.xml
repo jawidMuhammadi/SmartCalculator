@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.spotlightapps.simplecalculator.CalculatorFragment"
+        android:name="com.spotlightapps.simplecalculator.ui.calculator.CalculatorFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_calculator">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.spotlightapps.simplecalculator.CurrencyConvertFragment"
+        android:name="com.spotlightapps.simplecalculator.ui.CurrencyConvertFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_currency_converter">
 
