@@ -9,4 +9,12 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="clear_sign">C</string>
+    <string name="percent_unicode">%</string>
+    <string name="divide_unicode">÷</string>
+    <string name="multiply_unicode">×</string>
+    <string name="minos_unicode">−</string>
+    <string name="addition_unicode">+</string>
+    <string name="equal_unicode">=</string>
+
 </resources>

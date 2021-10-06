@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="actionKeyStyle">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/colorOrange</item>
+        <item name="android:textSize">34sp</item>
+        <item name="background">?selectableItemBackgroundBorderless</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

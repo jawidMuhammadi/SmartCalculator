@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.spotlightapps.simplecalculator.databinding.CustomKeyboardLayoutBinding
 import com.spotlightapps.simplecalculator.databinding.CustomNumericKeyboardItemBinding

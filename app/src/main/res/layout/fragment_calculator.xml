@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,16 +13,126 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@color/cardview_dark_background" />
 
-    <com.spotlightapps.simplecalculator.utils.CustomNumericKeyboard
-        android:id="@+id/customNumericKeyboard"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvClear"
+                style="@style/actionKeyStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/clear_sign"
+                android:textSize="28sp" />
+
+            <ImageView
+                android:id="@+id/ivBackSpace"
+                android:layout_width="0dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@drawable/ic_backspace_black_24dp"
+                android:textColor="@color/colorOrange" />
+
+            <TextView
+                android:id="@+id/tvPercent"
+                style="@style/actionKeyStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/percent_unicode"
+                android:textSize="32sp" />
+
+            <TextView
+                android:id="@+id/tvDivide"
+                style="@style/actionKeyStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/divide_unicode" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <com.spotlightapps.simplecalculator.utils.CustomNumericKeyboard
+                android:id="@+id/customNumericKeyboard"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="7" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvMultiply"
+                    style="@style/actionKeyStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/multiply_unicode"
+                    tools:ignore="NestedWeights" />
+
+
+                <TextView
+                    android:id="@+id/tvMinus"
+                    style="@style/actionKeyStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/minos_unicode" />
+
+                <TextView
+                    android:id="@+id/tvAdd"
+                    style="@style/actionKeyStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/addition_unicode" />
+
+                <TextView
+                    android:id="@+id/tvEqual"
+                    style="@style/actionKeyStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/equal_unicode"
+                    android:textColor="@color/colorOrange" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </LinearLayout>
