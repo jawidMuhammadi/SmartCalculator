@@ -3,26 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/calculatorFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/calculatorFragment"
         android:name="com.spotlightapps.simplecalculator.ui.calculator.CalculatorFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_calculator">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_calculator"/>
     <fragment
-        android:id="@+id/SecondFragment"
+        android:id="@+id/exchangeFragment"
         android:name="com.spotlightapps.simplecalculator.ui.CurrencyConvertFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_currency_converter">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_currency_converter"/>
 </navigation>
