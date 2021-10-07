@@ -27,6 +27,7 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 ext {
+    retrofit = "2.9.0"
     okhttp_bom = "4.9.0"
     gson = "2.8.7"
     nav_version = "2.3.5"
