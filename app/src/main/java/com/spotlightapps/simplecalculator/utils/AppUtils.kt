@@ -1,5 +1,9 @@
 package com.spotlightapps.simplecalculator.utils
 
+import android.content.Context
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.spotlightapps.simplecalculator.model.SymbolItem
 
