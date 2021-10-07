@@ -16,5 +16,7 @@
     <string name="minos_unicode">−</string>
     <string name="addition_unicode">+</string>
     <string name="equal_unicode">=</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
 
 </resources>
