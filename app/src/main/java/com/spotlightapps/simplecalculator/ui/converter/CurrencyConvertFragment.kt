@@ -33,7 +33,11 @@ class CurrencyConvertFragment : Fragment() {
         viewModel.getSymbolList()
 
         binding.cvFrom.setOnClickListener {
-            displayBottomSheetDialog()
+            displayBottomSheetDialog(true)
+        }
+
+        binding.cvTo.setOnClickListener {
+            displayBottomSheetDialog(false)
         }
     }
 
@@ -43,12 +47,20 @@ class CurrencyConvertFragment : Fragment() {
         })
     }
 
-    private fun displayBottomSheetDialog() {
+    private fun displayBottomSheetDialog(isFrom: Boolean) {
         val symbolBottomSheet = SymbolsBottomSheet(
             viewModel.symbols.value,
             object : SymbolsBottomSheet.OnBottomSheetItemClicked {
                 override fun onItemClicked(item: SymbolItem) {
-
+                    binding.apply {
+                        if (isFrom) {
+                            tvFromSymbol.text = item.currencySymbol
+                            tvFromCountryName.text = item.countryName
+                        } else {
+                            tvToSymbol.text = item.currencySymbol
+                            tvToCountryName.text = item.countryName
+                        }
+                    }
                 }
 
             })
