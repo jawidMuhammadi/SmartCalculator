@@ -2,6 +2,7 @@ package com.spotlightapps.simplecalculator.network
 
 import com.spotlightapps.simplecalculator.model.rate.ExchangeRate
 import com.spotlightapps.simplecalculator.model.symbol.CountrySymbol
+import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 
 /**
@@ -12,10 +13,9 @@ import retrofit2.http.GET
 interface CurrencyRateService {
 
     @GET(ENDPOINT_LATEST)
-    suspend fun getExchangeRates(): ExchangeRate?
+    fun getExchangeRatesAsync(): Deferred<ExchangeRate?>
 
     @GET(ENDPOINT_SYMBOLS)
-    suspend fun getCountrySymbols(): CountrySymbol?
-
+    fun getCountrySymbolsAsync(): Deferred<CountrySymbol?>
 
 }

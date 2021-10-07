@@ -9,4 +9,13 @@
         <item name="background">?selectableItemBackgroundBorderless</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="Widget.App.ButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/OrangeThemeOverlay</item>
+    </style>
+
+    <style name="OrangeThemeOverlay">
+        <item name="colorPrimary">@color/colorOrange</item>
+        <item name="background">@drawable/custom_button_background_white</item>
+    </style>
 </resources>

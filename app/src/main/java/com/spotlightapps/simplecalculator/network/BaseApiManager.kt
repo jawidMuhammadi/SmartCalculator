@@ -1,5 +1,6 @@
 package com.spotlightapps.simplecalculator.network
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -21,6 +22,7 @@ const val READ_TIME_OUT: Long = 60000
 const val WRITE_TIME_OUT: Long = 60000
 const val CONTENT_TYPE = "Content-Type"
 const val ACCEPT = "Accept"
+const val ACCESS_KEY = "access_key"
 
 class BaseApiManager @Inject constructor() : Interceptor {
 
@@ -36,6 +38,7 @@ class BaseApiManager @Inject constructor() : Interceptor {
         retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .client(getOkHttpClient())
             .build()
     }
@@ -59,9 +62,14 @@ class BaseApiManager @Inject constructor() : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request: Request = chain.request()
+        val newUrl = request.url.newBuilder().addQueryParameter(
+            ACCESS_KEY, API_KEY
+        ).build()
         val newRequest = request.newBuilder()
             .addHeader(CONTENT_TYPE, CONTENT_TYPE_VALUE)
             .addHeader(ACCEPT, ACCEPT_VALUE)
+            .addHeader(ACCESS_KEY, API_KEY)
+            .url(newUrl)
             .build()
         return chain.proceed(newRequest)
     }

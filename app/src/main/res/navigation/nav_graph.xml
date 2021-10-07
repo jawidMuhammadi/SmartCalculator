@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_calculator"/>
     <fragment
         android:id="@+id/exchangeFragment"
-        android:name="com.spotlightapps.simplecalculator.ui.CurrencyConvertFragment"
+        android:name="com.spotlightapps.simplecalculator.ui.converter.CurrencyConvertFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_currency_converter"/>
 </navigation>
