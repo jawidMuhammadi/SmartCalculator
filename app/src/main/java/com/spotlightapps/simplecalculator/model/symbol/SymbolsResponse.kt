@@ -3,7 +3,7 @@ package com.spotlightapps.simplecalculator.model.symbol
 
 import com.google.gson.annotations.SerializedName
 
-data class CountrySymbol(
+data class SymbolsResponse(
     @SerializedName("success")
     var success: Boolean?,
     @SerializedName("symbols")

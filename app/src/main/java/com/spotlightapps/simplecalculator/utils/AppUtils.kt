@@ -1,9 +1,5 @@
 package com.spotlightapps.simplecalculator.utils
 
-import android.content.Context
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.spotlightapps.simplecalculator.model.SymbolItem
 
@@ -23,4 +19,20 @@ fun getSymbolItemListFromJsonObject(json: String): List<SymbolItem> {
         symbolList.add(SymbolItem(currencySymbol = key, countryName = value))
     }
     return symbolList
+}
+
+fun getRatesInMapFromJsonObject(json: String): Map<String, Double> {
+    return Gson().fromJson<Map<String, Double>>(
+        json,
+        MutableMap::class.java
+    )
+}
+
+fun calculateExchangeToRateValue(
+    fromRate: Double,
+    toRate: Double,
+    fromAmount: Double
+): Double {
+    val amountEuro = fromAmount.div(fromRate)
+    return amountEuro.times(toRate)
 }

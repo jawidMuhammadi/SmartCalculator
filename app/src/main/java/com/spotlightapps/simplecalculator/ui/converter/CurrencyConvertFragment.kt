@@ -37,7 +37,8 @@ class CurrencyConvertFragment : Fragment() {
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
         initObservers()
-        //  viewModel.getSymbolList()
+        viewModel.getSymbolList()
+        // viewModel.getRatesList()
 
         binding.apply {
             cvFrom.setOnClickListener {
@@ -49,18 +50,42 @@ class CurrencyConvertFragment : Fragment() {
             customNumericKeyboard2.setOnKeyClickListener(object :
                 CustomNumericKeyboard.OnCustomNumericKeyboardClickListener {
                 override fun onKeyClicked(value: String) {
-                    if (binding.etFrom.hasFocus()) {
+                    if (etFrom.hasFocus()) {
                         val currentValue = etFrom.text.toString()
                         val newValue = currentValue + value
-                        binding.etFrom.setText(newValue)
+                        etFrom.setText(newValue)
                     }
-                    if (binding.etTo.hasFocus()) {
+                    if (etTo.hasFocus()) {
                         val currentValue = etTo.text.toString()
                         val newValue = currentValue + value
-                        binding.etTo.setText(newValue)
+                        etTo.setText(newValue)
                     }
                 }
             })
+            btnBackspace.setOnClickListener {
+                if (etFrom.hasFocus()) {
+                    val currentValue = etFrom.text.toString()
+                    if (currentValue.isNotEmpty()) {
+                        val newValue = currentValue.removeRange(
+                            currentValue.length - 1, currentValue.length
+                        )
+                        etFrom.setText(newValue)
+                    }
+                }
+                if (etTo.hasFocus()) {
+                    val currentValue = etTo.text.toString()
+                    if (currentValue.isNotEmpty()) {
+                        val newValue = currentValue.removeRange(
+                            currentValue.length - 1, currentValue.length
+                        )
+                        etTo.setText(newValue)
+                    }
+                }
+            }
+            btnClear.setOnClickListener {
+                etTo.setText("")
+                etFrom.setText("")
+            }
         }
         setTouchListeners()
     }
@@ -109,8 +134,27 @@ class CurrencyConvertFragment : Fragment() {
     }
 
     private fun initObservers() {
-        viewModel.symbols.observe(viewLifecycleOwner, {
-            Toast.makeText(context, "result: ${it?.aFN}", Toast.LENGTH_SHORT).show()
+        viewModel.exchangeRate.observe(viewLifecycleOwner, {
+            Toast.makeText(context, "base: ${it?.base}", Toast.LENGTH_SHORT).show()
+        })
+        viewModel.selectedFromRateSymbolItem.observe(viewLifecycleOwner, {
+            binding.apply {
+                tvFromCountryName.text = it?.countryName
+                tvFromSymbol.text = it?.currencySymbol
+                // viewModel.calculateFromToValue(binding.etFrom.text.toString().toDouble())
+            }
+        })
+        viewModel.selectedToRateSymbolItem.observe(viewLifecycleOwner, {
+            binding.apply {
+                tvToCountryName.text = it?.countryName
+                tvToSymbol.text = it?.currencySymbol
+            }
+        })
+        viewModel.toAmount.observe(viewLifecycleOwner, {
+            binding.etTo.setText(String.format("%.2f", it))
+        })
+        viewModel.fromAmount.observe(viewLifecycleOwner, {
+            binding.etFrom.setText(String.format("%.2f", it))
         })
     }
 
@@ -119,15 +163,7 @@ class CurrencyConvertFragment : Fragment() {
             viewModel.symbols.value,
             object : SymbolsBottomSheet.OnBottomSheetItemClicked {
                 override fun onItemClicked(item: SymbolItem) {
-                    binding.apply {
-                        if (isFrom) {
-                            tvFromSymbol.text = item.currencySymbol
-                            tvFromCountryName.text = item.countryName
-                        } else {
-                            tvToSymbol.text = item.currencySymbol
-                            tvToCountryName.text = item.countryName
-                        }
-                    }
+                    viewModel.onSymbolItemSelected(item, isFrom)
                 }
 
             })

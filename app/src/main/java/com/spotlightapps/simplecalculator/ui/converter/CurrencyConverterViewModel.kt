@@ -4,8 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.spotlightapps.simplecalculator.model.RateSymbolItem
+import com.spotlightapps.simplecalculator.model.SymbolItem
+import com.spotlightapps.simplecalculator.model.rate.RatesResponse
 import com.spotlightapps.simplecalculator.model.symbol.Symbols
 import com.spotlightapps.simplecalculator.network.BaseApiManager
+import com.spotlightapps.simplecalculator.utils.calculateExchangeToRateValue
+import com.spotlightapps.simplecalculator.utils.getRatesInMapFromJsonObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,15 +29,97 @@ class CurrencyConverterViewModel @Inject constructor(
     private var _symbols = MutableLiveData<Symbols?>()
     val symbols: LiveData<Symbols?> = _symbols
 
+    private var ratesMap: MutableMap<String, Double> = hashMapOf()
+
+    private var _exchangeRate = MutableLiveData<RatesResponse?>()
+    val exchangeRate: LiveData<RatesResponse?> = _exchangeRate
+
+    private var _selectedFromRateItem = MutableLiveData<RateSymbolItem?>()
+    val selectedFromRateSymbolItem: LiveData<RateSymbolItem?> = _selectedFromRateItem
+
+    private var _selectedToRateItem = MutableLiveData<RateSymbolItem?>()
+    val selectedToRateSymbolItem: LiveData<RateSymbolItem?> = _selectedToRateItem
+
+    private var _fromAmount = MutableLiveData<Double>()
+    val fromAmount: LiveData<Double> = _fromAmount
+
+    private var _toAmount = MutableLiveData<Double>()
+    val toAmount: LiveData<Double> = _toAmount
+
     fun getSymbolList() {
         viewModelScope.launch {
             try {
-                val list = baseApiManager.currencyRateService.getCountrySymbolsAsync().await()
-                _symbols.value = list?.symbols
+                val symbolsResponse =
+                    baseApiManager.currencyRateService.getCountrySymbolsAsync().await()
+                _symbols.value = symbolsResponse?.symbols
+                getRatesList()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
+    private fun getRatesList() {
+        viewModelScope.launch {
+            try {
+                val rateResponse =
+                    baseApiManager.currencyRateService.getExchangeRatesAsync().await()
+                _exchangeRate.value = rateResponse
+                ratesMap = getRatesInMapFromJsonObject(
+                    Gson().toJson(rateResponse?.rates)
+                ).toMutableMap()
+                selectDefaultRates()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun selectDefaultRates() {
+        _selectedFromRateItem.value = RateSymbolItem(
+            currencySymbol = "USD",
+            rate = ratesMap["USD"],
+            countryName = "United States"
+        )
+        _selectedToRateItem.value = RateSymbolItem(
+            currencySymbol = "AFN",
+            rate = ratesMap["AFN"],
+            countryName = "Afghanistan"
+        )
+        calculateFromToValue(1.0)
+        _fromAmount.value = 1.0
+    }
+
+    fun calculateFromToValue(newValue: Double) {
+        _toAmount.value = calculateExchangeToRateValue(
+            fromRate = _selectedFromRateItem.value?.rate!!,
+            toRate = _selectedToRateItem.value?.rate!!,
+            fromAmount = newValue
+        )
+    }
+
+    fun calculateToFromValue(newValue: Double) {
+        _fromAmount.value = calculateExchangeToRateValue(
+            fromRate = _selectedToRateItem.value?.rate!!,
+            toRate = _selectedFromRateItem.value?.rate!!,
+            fromAmount = newValue
+        )
+    }
+
+    fun onSymbolItemSelected(symbolItem: SymbolItem, isFromItem: Boolean) {
+        if (isFromItem) {
+            _selectedFromRateItem.value = RateSymbolItem(
+                currencySymbol = symbolItem.currencySymbol,
+                rate = ratesMap[symbolItem.currencySymbol],
+                countryName = symbolItem.countryName
+            )
+        } else {
+            _selectedToRateItem.value = RateSymbolItem(
+                currencySymbol = symbolItem.currencySymbol,
+                rate = ratesMap[symbolItem.currencySymbol],
+                countryName = symbolItem.countryName
+            )
+        }
+        calculateFromToValue(_fromAmount.value!!)
+    }
 }

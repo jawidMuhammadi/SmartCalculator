@@ -4,7 +4,7 @@ package com.spotlightapps.simplecalculator.model.rate
 import com.google.gson.annotations.SerializedName
 import com.spotlightapps.simplecalculator.model.rate.Rates
 
-data class ExchangeRate(
+data class RatesResponse(
     @SerializedName("base")
     var base: String?,
     @SerializedName("date")
