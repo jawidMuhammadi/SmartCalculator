@@ -54,11 +54,13 @@ class CurrencyConvertFragment : Fragment() {
                         val currentValue = etFrom.text.toString()
                         val newValue = currentValue + value
                         etFrom.setText(newValue)
+                        viewModel.calculateFromToValue(newValue.toDouble())
                     }
                     if (etTo.hasFocus()) {
                         val currentValue = etTo.text.toString()
                         val newValue = currentValue + value
                         etTo.setText(newValue)
+                        viewModel.calculateToFromValue(newValue.toDouble())
                     }
                 }
             })
@@ -70,6 +72,7 @@ class CurrencyConvertFragment : Fragment() {
                             currentValue.length - 1, currentValue.length
                         )
                         etFrom.setText(newValue)
+                        if (newValue.isNotEmpty()) viewModel.calculateFromToValue(newValue.toDouble())
                     }
                 }
                 if (etTo.hasFocus()) {
@@ -79,6 +82,7 @@ class CurrencyConvertFragment : Fragment() {
                             currentValue.length - 1, currentValue.length
                         )
                         etTo.setText(newValue)
+                        if (newValue.isNotEmpty()) viewModel.calculateToFromValue(newValue.toDouble())
                     }
                 }
             }
@@ -141,7 +145,6 @@ class CurrencyConvertFragment : Fragment() {
             binding.apply {
                 tvFromCountryName.text = it?.countryName
                 tvFromSymbol.text = it?.currencySymbol
-                // viewModel.calculateFromToValue(binding.etFrom.text.toString().toDouble())
             }
         })
         viewModel.selectedToRateSymbolItem.observe(viewLifecycleOwner, {
