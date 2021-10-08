@@ -21,4 +21,6 @@
     <string name="select_currency">Select Currency</string>
     <string name="cancel">Cancel</string>
 
+    <string name="equal_place_holder">= %s</string>
+
 </resources>

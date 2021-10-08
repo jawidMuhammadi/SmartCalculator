@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.spotlightapps.simplecalculator.R
 import com.spotlightapps.simplecalculator.databinding.FragmentCalculatorBinding
 import com.spotlightapps.simplecalculator.utils.CustomNumericKeyboard
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,7 +38,13 @@ class CalculatorFragment : Fragment() {
         })
 
         vieModel.result.observe(viewLifecycleOwner, {
-            binding.consoleLayout.tvResult.text = "= $it"
+            binding.consoleLayout.tvResult.apply {
+                text = if (!it.isNullOrEmpty()) {
+                    getString(R.string.equal_place_holder, it)
+                } else {
+                    ""
+                }
+            }
         })
 
         vieModel.expression.observe(viewLifecycleOwner, {
@@ -50,23 +57,23 @@ class CalculatorFragment : Fragment() {
     private fun setClickListeners() {
         binding.apply {
             tvAdd.setOnClickListener {
-                vieModel.addSignOExpression(tvAdd.text.toString(), OperationType.ADD)
+                vieModel.addOperatorOnExpression(tvAdd.text.toString(), OperatorType.ADD)
             }
             tvMinus.setOnClickListener {
-                vieModel.addSignOExpression(tvMinus.text.toString(), OperationType.MINUS)
+                vieModel.addOperatorOnExpression(tvMinus.text.toString(), OperatorType.MINUS)
             }
             tvMultiply.setOnClickListener {
-                vieModel.addSignOExpression(tvMultiply.text.toString(), OperationType.MULTIPLY)
+                vieModel.addOperatorOnExpression(tvMultiply.text.toString(), OperatorType.MULTIPLY)
             }
             tvDivide.setOnClickListener {
-                vieModel.addSignOExpression(tvDivide.text.toString(), OperationType.DIVIDE)
+                vieModel.addOperatorOnExpression(tvDivide.text.toString(), OperatorType.DIVIDE)
             }
             tvPercent.setOnClickListener {
-                vieModel.addSignOExpression(tvPercent.text.toString(), OperationType.PERCENT)
+                vieModel.addOperatorOnExpression(tvPercent.text.toString(), OperatorType.PERCENT)
             }
 
             ivBackSpace.setOnClickListener {
-                vieModel.addSignOExpression(null, OperationType.BACKSPACE)
+                vieModel.onBackspaceClicked()
             }
         }
     }

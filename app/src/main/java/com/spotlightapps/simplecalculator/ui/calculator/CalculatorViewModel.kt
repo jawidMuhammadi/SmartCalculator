@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 /**
  * Created by Ahmad Jawid Muhammadi
@@ -17,7 +16,8 @@ import kotlin.collections.ArrayList
 class CalculatorViewModel @Inject constructor() : ViewModel() {
 
     private var operandList: MutableList<String> = LinkedList()
-    private var operatorsList: MutableList<OperationType> = LinkedList()
+    private var operatorsList: MutableList<OperatorType> = LinkedList()
+    private var resultList: MutableList<String> = LinkedList()
 
     private var _result = MutableLiveData<String?>()
     val result: LiveData<String?> = _result
@@ -26,94 +26,95 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     val expression: LiveData<String> = _expression
 
     private var currentOperand: String = ""
-    private var currentOperator: OperationType = OperationType.NOTING
 
     private var leftOperand: String = ""
 
+    private var latestOperator: OperatorType? = null
+
     fun addNewValue(value: String) {
-        var operands = _expression.value
-        operands += value
-        _expression.value = operands
+        _expression.value += value
         currentOperand += value
-        if (currentOperator != OperationType.NOTING) {
-            performOperation(currentOperator)
+        if (latestOperator != null) {
+            performOperation(latestOperator!!)
         } else {
             _result.value = currentOperand
         }
     }
 
-    fun addSignOExpression(sign: String?, operationType: OperationType) {
-        if (!sign.isNullOrEmpty()) {
-            _expression.value += sign
+    fun addOperatorOnExpression(operatorSign: String?, operatorType: OperatorType) {
+        _expression.value += operatorSign
+        operatorsList.add(operatorType)
+        latestOperator = operatorType
+        leftOperand = result.value!!
+        resultList.add(leftOperand)
+        operandList.add(currentOperand)
+        currentOperand = ""
 
-            operatorsList.add(operationType)
-            currentOperator = operatorsList[operatorsList.lastIndex]
+    }
 
-            operandList.add(currentOperand)
-            leftOperand = result.value!!
-            currentOperand = ""
-        } else {
-            performOperation(operationType)
+    private fun performOperation(operatorType: OperatorType) {
+        when (operatorType) {
+            OperatorType.PERCENT -> {
+                _result.value = leftOperand.toInt().rem(currentOperand.toInt()).toString()
+            }
+            OperatorType.DIVIDE -> {
+                _result.value = leftOperand.toInt().div(currentOperand.toInt()).toString()
+            }
+            OperatorType.ADD -> {
+                _result.value = currentOperand.toInt().plus(leftOperand.toInt()).toString()
+            }
+            OperatorType.MINUS -> {
+                _result.value = leftOperand.toInt().minus(currentOperand.toInt()).toString()
+            }
+            OperatorType.MULTIPLY -> {
+                _result.value = leftOperand.toInt().times(currentOperand.toInt()).toString()
+            }
         }
     }
 
-    private fun performOperation(operationType: OperationType) {
-        val result = _result.value
-        when (operationType) {
-            OperationType.CLEAR -> TODO()
-            OperationType.BACKSPACE -> {
-                if (currentOperand.isNotEmpty()) {
-                    if (currentOperand.length >= 2) {
-                        currentOperand = currentOperand.removeRange(
-                            currentOperand.length - 1,
-                            currentOperand.length
-                        )
-                    }
-                    if (currentOperand.isEmpty()) {
-                        currentOperand = "0"
-                        performOperation(currentOperator)
-                        val operands = _expression.value!!
-                        _expression.value = operands.removeRange(
-                            operands.length - 1, operands.length
-                        )
-
-                        leftOperand = if (operandList.size > 2) {
-                            operandList[operandList.lastIndex - 1]
-                        } else {
-                            "0"
-                        }
-                        currentOperand = operandList[operandList.lastIndex]
-                        currentOperator = operatorsList[operatorsList.lastIndex]
-                    } else {
-                        performOperation(currentOperator)
-                        val operands = _expression.value!!
-                        _expression.value = operands.removeRange(
-                            operands.length - 1, operands.length
-                        )
-                    }
+    fun onBackspaceClicked() {
+        if (currentOperand.isNotEmpty()) {
+            currentOperand = currentOperand.removeRange(
+                currentOperand.length - 1,
+                currentOperand.length
+            )
+            if (currentOperand.isNotEmpty() && latestOperator != null) {
+                leftOperand = resultList[resultList.lastIndex]
+                performOperation(latestOperator!!)
+            } else {
+                if (latestOperator == null) {
+                    leftOperand = currentOperand
                 } else {
-
+                    resultList.removeLast()
                 }
+                _result.value = leftOperand
+            }
 
+            val operands = _expression.value!!
+            _expression.value = operands.removeRange(
+                operands.length - 1, operands.length
+            )
+        } else {
+            _expression.value?.let {
+                if (it.length > 1) {
+                    _expression.value = it.removeRange(
+                        it.length - 1, it.length
+                    )
+                } else {
+                    _expression.value = ""
+                }
             }
-            OperationType.PERCENT -> {
-                _result.value = leftOperand.toInt().rem(currentOperand.toInt()).toString()
+            if (operandList.isNotEmpty()) {
+                currentOperand = operandList[operandList.lastIndex]
+                operandList.removeLast()
             }
-            OperationType.DIVIDE -> {
-                _result.value = leftOperand.toInt().div(currentOperand.toInt()).toString()
+
+            if (operatorsList.isNotEmpty()) {
+                operatorsList.removeLast()
             }
-            OperationType.ADD -> {
-                _result.value = currentOperand.toInt().plus(leftOperand.toInt()).toString()
-            }
-            OperationType.MINUS -> {
-                _result.value = leftOperand.toInt().minus(currentOperand.toInt()).toString()
-            }
-            OperationType.MULTIPLY -> {
-                _result.value = leftOperand.toInt().times(currentOperand.toInt()).toString()
-            }
-            OperationType.EQUAL -> TODO()
-            OperationType.NOTING -> {
-            }
+            latestOperator = if (operatorsList.isNotEmpty()) {
+                operatorsList[operatorsList.lastIndex]
+            } else null
         }
     }
 }

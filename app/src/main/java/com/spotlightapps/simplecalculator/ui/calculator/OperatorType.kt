@@ -5,14 +5,10 @@ package com.spotlightapps.simplecalculator.ui.calculator
  * on 06-10-2021.
  */
 
-enum class OperationType {
-    CLEAR,
-    BACKSPACE,
+enum class OperatorType {
     PERCENT,
     DIVIDE,
     ADD,
     MINUS,
-    MULTIPLY,
-    EQUAL,
-    NOTING
+    MULTIPLY
 }
