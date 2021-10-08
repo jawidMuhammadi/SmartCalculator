@@ -9,6 +9,7 @@ import com.spotlightapps.simplecalculator.model.RateSymbolItem
 import com.spotlightapps.simplecalculator.model.SymbolItem
 import com.spotlightapps.simplecalculator.model.rate.RatesResponse
 import com.spotlightapps.simplecalculator.model.symbol.Symbols
+import com.spotlightapps.simplecalculator.network.ApiCallStatus
 import com.spotlightapps.simplecalculator.network.BaseApiManager
 import com.spotlightapps.simplecalculator.utils.calculateExchangeToRateValue
 import com.spotlightapps.simplecalculator.utils.getRatesInMapFromJsonObject
@@ -31,9 +32,6 @@ class CurrencyConverterViewModel @Inject constructor(
 
     private var ratesMap: MutableMap<String, Double> = hashMapOf()
 
-    private var _exchangeRate = MutableLiveData<RatesResponse?>()
-    val exchangeRate: LiveData<RatesResponse?> = _exchangeRate
-
     private var _selectedFromRateItem = MutableLiveData<RateSymbolItem?>()
     val selectedFromRateSymbolItem: LiveData<RateSymbolItem?> = _selectedFromRateItem
 
@@ -46,8 +44,12 @@ class CurrencyConverterViewModel @Inject constructor(
     private var _toAmount = MutableLiveData<Double>()
     val toAmount: LiveData<Double> = _toAmount
 
+    private var _apiCallStatus = MutableLiveData<ApiCallStatus>()
+    val apiCallStatus: LiveData<ApiCallStatus> = _apiCallStatus
+
     fun getSymbolList() {
         viewModelScope.launch {
+            _apiCallStatus.value = ApiCallStatus.PROGRESS
             try {
                 val symbolsResponse =
                     baseApiManager.currencyRateService.getCountrySymbolsAsync().await()
@@ -55,6 +57,7 @@ class CurrencyConverterViewModel @Inject constructor(
                 getRatesList()
             } catch (e: Exception) {
                 e.printStackTrace()
+                _apiCallStatus.value = ApiCallStatus.FAILED
             }
         }
     }
@@ -64,13 +67,14 @@ class CurrencyConverterViewModel @Inject constructor(
             try {
                 val rateResponse =
                     baseApiManager.currencyRateService.getExchangeRatesAsync().await()
-                _exchangeRate.value = rateResponse
                 ratesMap = getRatesInMapFromJsonObject(
                     Gson().toJson(rateResponse?.rates)
                 ).toMutableMap()
                 selectDefaultRates()
+                _apiCallStatus.value = ApiCallStatus.SUCCESS
             } catch (e: Exception) {
                 e.printStackTrace()
+                _apiCallStatus.value = ApiCallStatus.FAILED
             }
         }
     }
@@ -90,22 +94,6 @@ class CurrencyConverterViewModel @Inject constructor(
         _fromAmount.value = 1.0
     }
 
-    fun calculateFromToValue(newValue: Double) {
-        _toAmount.value = calculateExchangeToRateValue(
-            fromRate = _selectedFromRateItem.value?.rate!!,
-            toRate = _selectedToRateItem.value?.rate!!,
-            fromAmount = newValue
-        )
-    }
-
-    fun calculateToFromValue(newValue: Double) {
-        _fromAmount.value = calculateExchangeToRateValue(
-            fromRate = _selectedToRateItem.value?.rate!!,
-            toRate = _selectedFromRateItem.value?.rate!!,
-            fromAmount = newValue
-        )
-    }
-
     fun onSymbolItemSelected(symbolItem: SymbolItem, isFromItem: Boolean) {
         if (isFromItem) {
             _selectedFromRateItem.value = RateSymbolItem(
@@ -120,6 +108,23 @@ class CurrencyConverterViewModel @Inject constructor(
                 countryName = symbolItem.countryName
             )
         }
+        _fromAmount.value = 1.0
         calculateFromToValue(_fromAmount.value!!)
+    }
+
+    fun calculateFromToValue(newValue: Double) {
+        _toAmount.value = calculateExchangeToRateValue(
+            fromRate = _selectedFromRateItem.value?.rate!!,
+            toRate = _selectedToRateItem.value?.rate!!,
+            fromAmount = newValue
+        )
+    }
+
+    fun calculateToFromValue(newValue: Double) {
+        _fromAmount.value = calculateExchangeToRateValue(
+            fromRate = _selectedToRateItem.value?.rate!!,
+            toRate = _selectedFromRateItem.value?.rate!!,
+            fromAmount = newValue
+        )
     }
 }

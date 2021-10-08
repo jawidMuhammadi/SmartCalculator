@@ -7,13 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.spotlightapps.simplecalculator.R
 import com.spotlightapps.simplecalculator.databinding.FragmentCurrencyConverterBinding
 import com.spotlightapps.simplecalculator.model.SymbolItem
+import com.spotlightapps.simplecalculator.network.ApiCallStatus
 import com.spotlightapps.simplecalculator.utils.CustomNumericKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,7 +38,6 @@ class CurrencyConvertFragment : Fragment() {
 
         initObservers()
         viewModel.getSymbolList()
-        // viewModel.getRatesList()
 
         binding.apply {
             cvFrom.setOnClickListener {
@@ -138,9 +137,6 @@ class CurrencyConvertFragment : Fragment() {
     }
 
     private fun initObservers() {
-        viewModel.exchangeRate.observe(viewLifecycleOwner, {
-            Toast.makeText(context, "base: ${it?.base}", Toast.LENGTH_SHORT).show()
-        })
         viewModel.selectedFromRateSymbolItem.observe(viewLifecycleOwner, {
             binding.apply {
                 tvFromCountryName.text = it?.countryName
@@ -158,6 +154,17 @@ class CurrencyConvertFragment : Fragment() {
         })
         viewModel.fromAmount.observe(viewLifecycleOwner, {
             binding.etFrom.setText(String.format("%.2f", it))
+        })
+        viewModel.apiCallStatus.observe(viewLifecycleOwner, {
+            when (it) {
+                ApiCallStatus.PROGRESS -> binding.shimmerViewContainer.startShimmer()
+                ApiCallStatus.SUCCESS -> {
+                    binding.shimmerViewContainer.stopShimmer()
+                    binding.shimmerViewContainer.hideShimmer()
+                }
+                ApiCallStatus.FAILED -> binding.shimmerViewContainer.stopShimmer()
+            }
+
         })
     }
 
