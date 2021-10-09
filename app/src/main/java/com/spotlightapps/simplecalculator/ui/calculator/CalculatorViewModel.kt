@@ -7,6 +7,7 @@ import com.spotlightapps.simplecalculator.model.HistoryItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 /**
  * Created by Ahmad Jawid Muhammadi
@@ -26,8 +27,8 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     private var _expression = MutableLiveData("")
     val expression: LiveData<String> = _expression
 
-    private var _historyList = MutableLiveData<MutableList<HistoryItem>>()
-    val historyList: LiveData<MutableList<HistoryItem>> = _historyList
+    private var _historyItem = MutableLiveData<HistoryItem>()
+    val historyItem: LiveData<HistoryItem> = _historyItem
 
     private var currentOperand: String = ""
 
@@ -156,13 +157,10 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun addExpressionToHistory() {
-        val history = HistoryItem(
+        _historyItem.value = HistoryItem(
             _expression.value,
             _result.value
         )
-        _historyList.value = historyList.value?.apply {
-            add(history)
-        }
         clearAllData()
         isEqualButtonClicked = false
     }

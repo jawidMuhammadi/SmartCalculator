@@ -10,9 +10,11 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.spotlightapps.simplecalculator.R
+import com.spotlightapps.simplecalculator.adapters.HistoryAdapter
 import com.spotlightapps.simplecalculator.databinding.FragmentCalculatorLayoutBinding
 import com.spotlightapps.simplecalculator.ui.views.CustomNumericKeyboard
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -20,6 +22,9 @@ class CalculatorFragment : Fragment() {
 
     private lateinit var binding: FragmentCalculatorLayoutBinding
     private val viewModel: CalculatorViewModel by viewModels()
+
+    @Inject
+    lateinit var historyAdapter: HistoryAdapter
 
 
     override fun onCreateView(
@@ -32,6 +37,8 @@ class CalculatorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.rvHistory.adapter = historyAdapter
 
         binding.customNumericKeyboard.setOnKeyClickListener(object :
             CustomNumericKeyboard.OnCustomNumericKeyboardClickListener {
@@ -76,6 +83,12 @@ class CalculatorFragment : Fragment() {
         viewModel.expression.observe(viewLifecycleOwner, {
             binding.tvExpression.text = it
         })
+
+        viewModel.historyItem.observe(viewLifecycleOwner, {
+            historyAdapter.addNewItem(it)
+            //Scroll to latest added history
+            binding.rvHistory.scrollToPosition(0)
+        })
     }
 
     private fun setClickListeners() {
@@ -103,7 +116,7 @@ class CalculatorFragment : Fragment() {
                 binding.apply {
                     tvExpression.textSize = 26f
                     tvExpression.setTextColor(
-                        ResourcesCompat.getColor(resources, R.color.grey_500, null)
+                        ResourcesCompat.getColor(resources, R.color.grey_700, null)
                     )
                     tvResult.setTextColor(
                         ResourcesCompat.getColor(resources, R.color.black, null)
