@@ -46,7 +46,7 @@
         android:textColor="@color/colorOrange"
         app:layout_constraintBottom_toBottomOf="@+id/tvClear"
         app:layout_constraintEnd_toStartOf="@+id/tvPercent"
-        app:layout_constraintHorizontal_bias="0.81"
+        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toEndOf="@+id/tvClear"
         app:layout_constraintTop_toTopOf="@+id/tvClear" />
 
@@ -60,7 +60,8 @@
         android:text="@string/percent_unicode"
         app:layout_constraintBottom_toBottomOf="@+id/ivBackSpace"
         app:layout_constraintEnd_toStartOf="@+id/tvDivide"
-        app:layout_constraintStart_toEndOf="@+id/ivBackSpace"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toEndOf="@+id/tvClear"
         app:layout_constraintTop_toTopOf="@+id/ivBackSpace"
         app:layout_constraintVertical_bias="0.51" />
 
@@ -145,7 +146,7 @@
         android:id="@+id/tvResult"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="34dp"
+        android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
         android:gravity="right"
