@@ -8,11 +8,9 @@
     <fragment
         android:id="@+id/calculatorFragment"
         android:name="com.spotlightapps.simplecalculator.ui.calculator.CalculatorFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_calculator"/>
+        tools:layout="@layout/fragment_calculator" />
     <fragment
         android:id="@+id/exchangeFragment"
         android:name="com.spotlightapps.simplecalculator.ui.converter.CurrencyConvertFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_currency_converter"/>
+        tools:layout="@layout/fragment_currency_converter" />
 </navigation>
