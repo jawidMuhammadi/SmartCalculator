@@ -22,7 +22,7 @@ class HistoryAdapter @Inject constructor() : RecyclerView.Adapter<HistoryAdapter
 
     fun addNewItem(item: HistoryItem) {
         historyList.add(0, item)
-        notifyItemInserted(0)
+        notifyDataSetChanged()
     }
 
     fun clearHistory() {

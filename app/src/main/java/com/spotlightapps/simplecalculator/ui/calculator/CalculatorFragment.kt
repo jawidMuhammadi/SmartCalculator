@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import com.spotlightapps.simplecalculator.R
 import com.spotlightapps.simplecalculator.adapters.HistoryAdapter
 import com.spotlightapps.simplecalculator.databinding.FragmentCalculatorLayoutBinding
+import com.spotlightapps.simplecalculator.model.HistoryItem
 import com.spotlightapps.simplecalculator.ui.views.CustomNumericKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -38,8 +39,6 @@ class CalculatorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvHistory.adapter = historyAdapter
-
         binding.customNumericKeyboard.setOnKeyClickListener(object :
             CustomNumericKeyboard.OnCustomNumericKeyboardClickListener {
             override fun onKeyClicked(value: String) {
@@ -49,22 +48,14 @@ class CalculatorFragment : Fragment() {
                 viewModel.addNewValue(value)
             }
 
-            private fun changeTextViewAttributesToDefault() {
-                binding.apply {
-                    tvExpression.textSize = 48f
-                    tvExpression.setTextColor(
-                        ResourcesCompat.getColor(resources, R.color.black, null)
-                    )
-
-                    tvResult.textSize = 26f
-                    tvResult.setTextColor(
-                        ResourcesCompat.getColor(
-                            resources, R.color.grey_700, null
-                        )
-                    )
-                }
-            }
         })
+
+        binding.rvHistory.adapter = historyAdapter.apply {
+            itemClickListener = {
+                viewModel.onHistoryItemClicked(it)
+                changeTextViewAttributesToDefault()
+            }
+        }
 
         initObservers()
 
@@ -139,5 +130,21 @@ class CalculatorFragment : Fragment() {
             duration = 300L
         }
         animator.start()
+    }
+
+    private fun changeTextViewAttributesToDefault() {
+        binding.apply {
+            tvExpression.textSize = 48f
+            tvExpression.setTextColor(
+                ResourcesCompat.getColor(resources, R.color.black, null)
+            )
+
+            tvResult.textSize = 26f
+            tvResult.setTextColor(
+                ResourcesCompat.getColor(
+                    resources, R.color.grey_700, null
+                )
+            )
+        }
     }
 }

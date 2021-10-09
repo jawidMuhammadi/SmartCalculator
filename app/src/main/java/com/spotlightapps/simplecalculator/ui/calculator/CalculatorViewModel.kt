@@ -7,7 +7,6 @@ import com.spotlightapps.simplecalculator.model.HistoryItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 /**
  * Created by Ahmad Jawid Muhammadi
@@ -18,7 +17,7 @@ import kotlin.collections.ArrayList
 class CalculatorViewModel @Inject constructor() : ViewModel() {
 
     private var operandList: MutableList<String> = LinkedList()
-    private var operatorsList: MutableList<OperatorType> = LinkedList()
+    private var operatorList: MutableList<OperatorType> = LinkedList()
     private var resultList: MutableList<String> = LinkedList()
 
     private var _result = MutableLiveData<String?>()
@@ -64,7 +63,7 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     fun addOperatorOnExpression(operatorSign: String?, operatorType: OperatorType) {
         if (isAllowEnteringOperatorSign) {
             _expression.value += operatorSign
-            operatorsList.add(operatorType)
+            operatorList.add(operatorType)
             latestOperator = operatorType
             leftOperand = result.value!!
             resultList.add(leftOperand)
@@ -147,19 +146,22 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
                 operandList.removeLast()
             }
 
-            if (operatorsList.isNotEmpty()) {
-                operatorsList.removeLast()
+            if (operatorList.isNotEmpty()) {
+                operatorList.removeLast()
             }
-            latestOperator = if (operatorsList.isNotEmpty()) {
-                operatorsList[operatorsList.lastIndex]
+            latestOperator = if (operatorList.isNotEmpty()) {
+                operatorList[operatorList.lastIndex]
             } else null
         }
     }
 
     private fun addExpressionToHistory() {
         _historyItem.value = HistoryItem(
-            _expression.value,
-            _result.value
+            expression = _expression.value,
+            result = _result.value,
+            resultList = resultList,
+            operandList = operandList,
+            operatorList = operatorList
         )
         clearAllData()
         isEqualButtonClicked = false
@@ -167,7 +169,7 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
 
     fun clearAllData() {
         operandList = LinkedList()
-        operatorsList = LinkedList()
+        operatorList = LinkedList()
         resultList = LinkedList()
         _result.value = ""
         _expression.value = ""
@@ -175,5 +177,15 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
         leftOperand = ""
         latestOperator = null
         isAllowEnteringOperatorSign = false
+    }
+
+    fun onHistoryItemClicked(item: HistoryItem) {
+        _expression.value = item.expression
+        _result.value = item.result
+        operandList = item.operandList?.toMutableList()!!
+        operatorList = item.operatorList?.toMutableList()!!
+        resultList = item.resultList?.toMutableList()!!
+
+        isEqualButtonClicked = false
     }
 }
