@@ -30,6 +30,8 @@ class HistoryAdapter @Inject constructor() : RecyclerView.Adapter<HistoryAdapter
         notifyDataSetChanged()
     }
 
+    fun getHistoryListSiz(): Int = historyList.size
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryAdapterVH {
         return HistoryAdapterVH.from(parent)
     }

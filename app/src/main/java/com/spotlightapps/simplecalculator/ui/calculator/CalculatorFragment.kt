@@ -12,7 +12,6 @@ import androidx.fragment.app.viewModels
 import com.spotlightapps.simplecalculator.R
 import com.spotlightapps.simplecalculator.adapters.HistoryAdapter
 import com.spotlightapps.simplecalculator.databinding.FragmentCalculatorLayoutBinding
-import com.spotlightapps.simplecalculator.model.HistoryItem
 import com.spotlightapps.simplecalculator.ui.views.CustomNumericKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -45,9 +44,12 @@ class CalculatorFragment : Fragment() {
                 if (viewModel.isEqualButtonClicked) {
                     changeTextViewAttributesToDefault()
                 }
+                if (binding.tvClear.text == getString(R.string.all_clear)) {
+                    binding.tvClear.text = getString(R.string.clear_sign)
+                }
+
                 viewModel.addNewValue(value)
             }
-
         })
 
         binding.rvHistory.adapter = historyAdapter.apply {
@@ -103,20 +105,30 @@ class CalculatorFragment : Fragment() {
                 viewModel.onBackspaceClicked()
             }
             tvEqual.setOnClickListener {
-                viewModel.isEqualButtonClicked = true
-                binding.apply {
-                    tvExpression.textSize = 26f
-                    tvExpression.setTextColor(
-                        ResourcesCompat.getColor(resources, R.color.grey_700, null)
-                    )
-                    tvResult.setTextColor(
-                        ResourcesCompat.getColor(resources, R.color.black, null)
-                    )
+                if (!viewModel.isEqualButtonClicked) {
+                    viewModel.isEqualButtonClicked = true
+                    binding.apply {
+                        tvExpression.textSize = 26f
+                        tvExpression.setTextColor(
+                            ResourcesCompat.getColor(resources, R.color.grey_700, null)
+                        )
+                        tvResult.setTextColor(
+                            ResourcesCompat.getColor(resources, R.color.black, null)
+                        )
+                    }
+                    animateResultTextView()
                 }
-                animateResultTextView()
             }
             tvClear.setOnClickListener {
-                viewModel.clearAllData()
+                if (tvClear.text == getString(R.string.clear_sign)) {
+                    if (historyAdapter.getHistoryListSiz() != 0) {
+                        tvClear.text = getString(R.string.all_clear)
+                    }
+                    viewModel.clearAllData()
+                } else {
+                    historyAdapter.clearHistory()
+                    tvClear.text = getString(R.string.clear_sign)
+                }
             }
         }
     }
