@@ -6,7 +6,7 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/colorOrange</item>
         <item name="android:textSize">32sp</item>
-        <item name="android:foreground">?selectableItemBackground</item>
+        <item name="android:background">?selectableItemBackgroundBorderless</item>
     </style>
 
     <style name="Widget.App.ButtonStyle" parent="Widget.MaterialComponents.Button">

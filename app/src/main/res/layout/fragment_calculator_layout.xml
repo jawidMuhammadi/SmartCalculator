@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:background="?selectableItemBackground"
+        android:background="?selectableItemBackgroundBorderless"
         android:paddingStart="24dp"
         android:paddingTop="24dp"
         android:paddingEnd="24dp"
