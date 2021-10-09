@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@color/grey_500"
+        app:layout_constraintBottom_toTopOf="@+id/tvClear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvClear"
+        style="@style/actionKeyStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_weight="1"
+        android:text="@string/clear_sign"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/customNumericKeyboard"
+        app:layout_constraintEnd_toStartOf="@+id/ivBackSpace"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivBackSpace"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:src="@drawable/ic_backspace_black_24dp"
+        android:textColor="@color/colorOrange"
+        app:layout_constraintBottom_toBottomOf="@+id/tvClear"
+        app:layout_constraintEnd_toStartOf="@+id/tvPercent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvClear"
+        app:layout_constraintTop_toTopOf="@+id/tvClear" />
+
+    <TextView
+        android:id="@+id/tvPercent"
+        style="@style/actionKeyStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/percent_unicode"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBackSpace"
+        app:layout_constraintEnd_toStartOf="@+id/tvDivide"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ivBackSpace"
+        app:layout_constraintTop_toTopOf="@+id/tvClear" />
+
+
+    <TextView
+        android:id="@+id/tvDivide"
+        style="@style/actionKeyStyle"
+        android:layout_width="77dp"
+        android:layout_height="59dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/divide_unicode"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPercent"
+        app:layout_constraintEnd_toEndOf="@+id/tvMultiply"
+        app:layout_constraintStart_toEndOf="@+id/tvPercent"
+        app:layout_constraintTop_toTopOf="@+id/tvPercent" />
+
+    <com.spotlightapps.simplecalculator.ui.views.CustomNumericKeyboard
+        android:id="@+id/customNumericKeyboard"
+        android:layout_width="0dp"
+        android:layout_height="322dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="24dp"
+        android:layout_weight="7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvMultiply"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tvMultiply"
+        style="@style/actionKeyStyle"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/multiply_unicode"
+        app:layout_constraintBottom_toTopOf="@+id/tvMinus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/customNumericKeyboard"
+        tools:ignore="NestedWeights" />
+
+    <TextView
+        android:id="@+id/tvMinus"
+        style="@style/actionKeyStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/minos_unicode"
+        app:layout_constraintBottom_toTopOf="@+id/tvAdd"
+        app:layout_constraintEnd_toEndOf="@+id/tvMultiply"
+        app:layout_constraintStart_toStartOf="@+id/tvMultiply"
+        app:layout_constraintTop_toBottomOf="@+id/tvMultiply" />
+
+    <TextView
+        android:id="@+id/tvAdd"
+        style="@style/actionKeyStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/addition_unicode"
+        app:layout_constraintBottom_toTopOf="@+id/tvEqual"
+        app:layout_constraintEnd_toEndOf="@+id/tvMinus"
+        app:layout_constraintStart_toStartOf="@+id/tvMinus"
+        app:layout_constraintTop_toBottomOf="@+id/tvMinus" />
+
+    <TextView
+        android:id="@+id/tvEqual"
+        style="@style/actionKeyStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/equal_unicode"
+        android:textColor="@color/colorOrange"
+        app:layout_constraintBottom_toBottomOf="@+id/customNumericKeyboard"
+        app:layout_constraintEnd_toEndOf="@+id/tvAdd"
+        app:layout_constraintStart_toStartOf="@+id/tvAdd"
+        app:layout_constraintTop_toBottomOf="@+id/tvAdd" />
+
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="34dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="right"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvExpression"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="right"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/tvResult"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
