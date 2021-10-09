@@ -16,5 +16,6 @@
     <string name="cancel">Cancel</string>
 
     <string name="equal_place_holder">= %s</string>
+    <string name="default_result">0</string>
 
 </resources>

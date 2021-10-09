@@ -1,9 +1,12 @@
 package com.spotlightapps.simplecalculator.ui.calculator
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.spotlightapps.simplecalculator.R
@@ -16,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class CalculatorFragment : Fragment() {
 
     private lateinit var binding: FragmentCalculatorLayoutBinding
-    private val vieModel: CalculatorViewModel by viewModels()
+    private val viewModel: CalculatorViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -33,53 +36,95 @@ class CalculatorFragment : Fragment() {
         binding.customNumericKeyboard.setOnKeyClickListener(object :
             CustomNumericKeyboard.OnCustomNumericKeyboardClickListener {
             override fun onKeyClicked(value: String) {
-                vieModel.addNewValue(value)
+                if (viewModel.isEqualButtonClicked) {
+                    changeTextViewAttributesToDefault()
+                }
+                viewModel.addNewValue(value)
             }
-        })
 
-        vieModel.result.observe(viewLifecycleOwner, {
-            binding.tvResult.apply {
-                text = if (!it.isNullOrEmpty()) {
-                    getString(R.string.equal_place_holder, it)
-                } else {
-                    ""
+            private fun changeTextViewAttributesToDefault() {
+                binding.apply {
+                    tvExpression.textSize = 48f
+                    tvExpression.setTextColor(
+                        ResourcesCompat.getColor(resources, R.color.black, null)
+                    )
+
+                    tvResult.textSize = 26f
+                    tvResult.setTextColor(
+                        ResourcesCompat.getColor(
+                            resources, R.color.grey_700, null
+                        )
+                    )
                 }
             }
         })
 
-        vieModel.expression.observe(viewLifecycleOwner, {
-            binding.tvExpression.text = it
-        })
+        initObservers()
 
         setClickListeners()
+    }
+
+    private fun initObservers() {
+        viewModel.result.observe(viewLifecycleOwner, {
+            binding.tvResult.apply {
+                text = if (!it.isNullOrEmpty()) {
+                    getString(R.string.equal_place_holder, it)
+                } else "0"
+            }
+        })
+
+        viewModel.expression.observe(viewLifecycleOwner, {
+            binding.tvExpression.text = it
+        })
     }
 
     private fun setClickListeners() {
         binding.apply {
             tvAdd.setOnClickListener {
-                vieModel.addOperatorOnExpression(tvAdd.text.toString(), OperatorType.ADD)
+                viewModel.addOperatorOnExpression(tvAdd.text.toString(), OperatorType.ADD)
             }
             tvMinus.setOnClickListener {
-                vieModel.addOperatorOnExpression(tvMinus.text.toString(), OperatorType.MINUS)
+                viewModel.addOperatorOnExpression(tvMinus.text.toString(), OperatorType.MINUS)
             }
             tvMultiply.setOnClickListener {
-                vieModel.addOperatorOnExpression(tvMultiply.text.toString(), OperatorType.MULTIPLY)
+                viewModel.addOperatorOnExpression(tvMultiply.text.toString(), OperatorType.MULTIPLY)
             }
             tvDivide.setOnClickListener {
-                vieModel.addOperatorOnExpression(tvDivide.text.toString(), OperatorType.DIVIDE)
+                viewModel.addOperatorOnExpression(tvDivide.text.toString(), OperatorType.DIVIDE)
             }
             tvPercent.setOnClickListener {
-                vieModel.addOperatorOnExpression(tvPercent.text.toString(), OperatorType.PERCENT)
+                viewModel.addOperatorOnExpression(tvPercent.text.toString(), OperatorType.PERCENT)
             }
             ivBackSpace.setOnClickListener {
-                vieModel.onBackspaceClicked()
+                viewModel.onBackspaceClicked()
             }
             tvEqual.setOnClickListener {
-
+                viewModel.isEqualButtonClicked = true
+                binding.apply {
+                    tvExpression.textSize = 26f
+                    tvExpression.setTextColor(
+                        ResourcesCompat.getColor(resources, R.color.grey_500, null)
+                    )
+                    tvResult.setTextColor(
+                        ResourcesCompat.getColor(resources, R.color.black, null)
+                    )
+                }
+                animateResultTextView()
             }
             tvClear.setOnClickListener {
-                vieModel.onClearClicked()
+                viewModel.clearAllData()
             }
         }
+    }
+
+    private fun animateResultTextView() {
+        val animator: ValueAnimator = ObjectAnimator.ofFloat(
+            binding.tvResult,
+            "textSize",
+            26F, 48f
+        ).apply {
+            duration = 300L
+        }
+        animator.start()
     }
 }

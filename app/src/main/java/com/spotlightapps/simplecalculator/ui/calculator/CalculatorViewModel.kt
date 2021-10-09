@@ -3,6 +3,7 @@ package com.spotlightapps.simplecalculator.ui.calculator
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.spotlightapps.simplecalculator.model.HistoryItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
@@ -25,15 +26,23 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     private var _expression = MutableLiveData("")
     val expression: LiveData<String> = _expression
 
+    private var _historyList = MutableLiveData<MutableList<HistoryItem>>()
+    val historyList: LiveData<MutableList<HistoryItem>> = _historyList
+
     private var currentOperand: String = ""
 
     private var leftOperand: String = ""
 
     private var latestOperator: OperatorType? = null
 
-    private var isAllowOperatorSign = false
+    private var isAllowEnteringOperatorSign = false
+
+    var isEqualButtonClicked = false
 
     fun addNewValue(value: String) {
+        if (isEqualButtonClicked) {
+            addExpressionToHistory()
+        }
         if (value == ".") {
             if (currentOperand.isNotEmpty() && !currentOperand.contains(".", true)) {
                 _expression.value += value
@@ -47,12 +56,12 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
             } else {
                 _result.value = currentOperand
             }
-            isAllowOperatorSign = true
+            isAllowEnteringOperatorSign = true
         }
     }
 
     fun addOperatorOnExpression(operatorSign: String?, operatorType: OperatorType) {
-        if (isAllowOperatorSign) {
+        if (isAllowEnteringOperatorSign) {
             _expression.value += operatorSign
             operatorsList.add(operatorType)
             latestOperator = operatorType
@@ -60,7 +69,7 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
             resultList.add(leftOperand)
             operandList.add(currentOperand)
             currentOperand = ""
-            isAllowOperatorSign = false
+            isAllowEnteringOperatorSign = false
         }
 
     }
@@ -146,7 +155,19 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun onClearClicked() {
+    private fun addExpressionToHistory() {
+        val history = HistoryItem(
+            _expression.value,
+            _result.value
+        )
+        _historyList.value = historyList.value?.apply {
+            add(history)
+        }
+        clearAllData()
+        isEqualButtonClicked = false
+    }
+
+    fun clearAllData() {
         operandList = LinkedList()
         operatorsList = LinkedList()
         resultList = LinkedList()
@@ -155,6 +176,6 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
         currentOperand = ""
         leftOperand = ""
         latestOperator = null
-        isAllowOperatorSign = false
+        isAllowEnteringOperatorSign = false
     }
 }
