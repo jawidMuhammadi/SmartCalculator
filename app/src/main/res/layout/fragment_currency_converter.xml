@@ -47,7 +47,7 @@
             app:layout_constraintStart_toStartOf="@+id/btnClear"
             app:layout_constraintTop_toBottomOf="@+id/btnClear" />
 
-        <com.spotlightapps.simplecalculator.utils.CustomNumericKeyboard
+        <com.spotlightapps.simplecalculator.ui.views.CustomNumericKeyboard
             android:id="@+id/customNumericKeyboard2"
             android:layout_width="0dp"
             android:layout_height="301dp"

@@ -31,43 +31,71 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
 
     private var latestOperator: OperatorType? = null
 
+    private var isAllowOperatorSign = false
+
     fun addNewValue(value: String) {
-        _expression.value += value
-        currentOperand += value
-        if (latestOperator != null) {
-            performOperation(latestOperator!!)
+        if (value == ".") {
+            if (currentOperand.isNotEmpty() && !currentOperand.contains(".", true)) {
+                _expression.value += value
+                currentOperand += value
+            }
         } else {
-            _result.value = currentOperand
+            _expression.value += value
+            currentOperand += value
+            if (latestOperator != null) {
+                performOperation(latestOperator!!)
+            } else {
+                _result.value = currentOperand
+            }
+            isAllowOperatorSign = true
         }
     }
 
     fun addOperatorOnExpression(operatorSign: String?, operatorType: OperatorType) {
-        _expression.value += operatorSign
-        operatorsList.add(operatorType)
-        latestOperator = operatorType
-        leftOperand = result.value!!
-        resultList.add(leftOperand)
-        operandList.add(currentOperand)
-        currentOperand = ""
+        if (isAllowOperatorSign) {
+            _expression.value += operatorSign
+            operatorsList.add(operatorType)
+            latestOperator = operatorType
+            leftOperand = result.value!!
+            resultList.add(leftOperand)
+            operandList.add(currentOperand)
+            currentOperand = ""
+            isAllowOperatorSign = false
+        }
 
     }
 
     private fun performOperation(operatorType: OperatorType) {
-        when (operatorType) {
+        val isExpressionDecimal = (currentOperand.contains(".") || leftOperand.contains("."))
+        _result.value = when (operatorType) {
             OperatorType.PERCENT -> {
-                _result.value = leftOperand.toInt().rem(currentOperand.toInt()).toString()
+                if (isExpressionDecimal) {
+                    leftOperand.toBigDecimal().rem(currentOperand.toBigDecimal()).toString()
+                } else leftOperand.toInt().rem(currentOperand.toInt()).toString()
             }
+
             OperatorType.DIVIDE -> {
-                _result.value = leftOperand.toInt().div(currentOperand.toInt()).toString()
+                if (isExpressionDecimal) {
+                    leftOperand.toBigDecimal().div(currentOperand.toBigDecimal()).toString()
+                } else leftOperand.toInt().div(currentOperand.toInt()).toString()
             }
+
             OperatorType.ADD -> {
-                _result.value = currentOperand.toInt().plus(leftOperand.toInt()).toString()
+                if (isExpressionDecimal) {
+                    currentOperand.toBigDecimal().plus(leftOperand.toBigDecimal()).toString()
+                } else currentOperand.toInt().plus(leftOperand.toInt()).toString()
             }
+
             OperatorType.MINUS -> {
-                _result.value = leftOperand.toInt().minus(currentOperand.toInt()).toString()
+                if (isExpressionDecimal) {
+                    leftOperand.toBigDecimal().minus(currentOperand.toBigDecimal()).toString()
+                } else leftOperand.toInt().minus(currentOperand.toInt()).toString()
             }
+
             OperatorType.MULTIPLY -> {
-                _result.value = leftOperand.toInt().times(currentOperand.toInt()).toString()
+                if (isExpressionDecimal) {
+                    leftOperand.toBigDecimal().times(currentOperand.toBigDecimal()).toString()
+                } else leftOperand.toInt().times(currentOperand.toInt()).toString()
             }
         }
     }

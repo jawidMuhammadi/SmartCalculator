@@ -1,4 +1,4 @@
-package com.spotlightapps.simplecalculator.utils
+package com.spotlightapps.simplecalculator.ui.views
 
 import android.content.Context
 import android.util.AttributeSet

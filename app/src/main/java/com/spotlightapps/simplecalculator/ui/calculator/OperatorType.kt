@@ -6,9 +6,9 @@ package com.spotlightapps.simplecalculator.ui.calculator
  */
 
 enum class OperatorType {
-    PERCENT,
     DIVIDE,
     ADD,
     MINUS,
+    PERCENT,
     MULTIPLY
 }

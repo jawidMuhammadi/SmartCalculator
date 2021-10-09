@@ -14,7 +14,7 @@ import com.spotlightapps.simplecalculator.R
 import com.spotlightapps.simplecalculator.databinding.FragmentCurrencyConverterBinding
 import com.spotlightapps.simplecalculator.model.SymbolItem
 import com.spotlightapps.simplecalculator.network.ApiCallStatus
-import com.spotlightapps.simplecalculator.utils.CustomNumericKeyboard
+import com.spotlightapps.simplecalculator.ui.views.CustomNumericKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 
