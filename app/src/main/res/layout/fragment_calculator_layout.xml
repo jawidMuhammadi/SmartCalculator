@@ -12,69 +12,70 @@
         android:layout_height="1dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="12dp"
         android:background="@color/grey_500"
         app:layout_constraintBottom_toTopOf="@+id/tvClear"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+
     <TextView
         android:id="@+id/tvClear"
         style="@style/actionKeyStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
+        android:layout_marginStart="10dp"
         android:layout_weight="1"
         android:text="@string/clear_sign"
         android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/customNumericKeyboard"
-        app:layout_constraintEnd_toStartOf="@+id/ivBackSpace"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/customNumericKeyboard" />
 
     <ImageView
         android:id="@+id/ivBackSpace"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
+        android:background="?selectableItemBackground"
+        android:paddingStart="24dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="24dp"
         android:src="@drawable/ic_backspace_black_24dp"
         android:textColor="@color/colorOrange"
         app:layout_constraintBottom_toBottomOf="@+id/tvClear"
         app:layout_constraintEnd_toStartOf="@+id/tvPercent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.81"
         app:layout_constraintStart_toEndOf="@+id/tvClear"
         app:layout_constraintTop_toTopOf="@+id/tvClear" />
 
     <TextView
         android:id="@+id/tvPercent"
         style="@style/actionKeyStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/percent_unicode"
-        android:textSize="32sp"
         app:layout_constraintBottom_toBottomOf="@+id/ivBackSpace"
         app:layout_constraintEnd_toStartOf="@+id/tvDivide"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ivBackSpace"
-        app:layout_constraintTop_toTopOf="@+id/tvClear" />
-
+        app:layout_constraintTop_toTopOf="@+id/ivBackSpace"
+        app:layout_constraintVertical_bias="0.51" />
 
     <TextView
         android:id="@+id/tvDivide"
         style="@style/actionKeyStyle"
         android:layout_width="77dp"
-        android:layout_height="59dp"
+        android:layout_height="77dp"
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/divide_unicode"
         app:layout_constraintBottom_toBottomOf="@+id/tvPercent"
         app:layout_constraintEnd_toEndOf="@+id/tvMultiply"
-        app:layout_constraintStart_toEndOf="@+id/tvPercent"
-        app:layout_constraintTop_toTopOf="@+id/tvPercent" />
+        app:layout_constraintTop_toTopOf="@+id/tvPercent"
+        app:layout_constraintVertical_bias="0.6" />
 
     <com.spotlightapps.simplecalculator.ui.views.CustomNumericKeyboard
         android:id="@+id/customNumericKeyboard"
@@ -133,10 +134,8 @@
         style="@style/actionKeyStyle"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:gravity="center"
         android:text="@string/equal_unicode"
-        android:textColor="@color/colorOrange"
         app:layout_constraintBottom_toBottomOf="@+id/customNumericKeyboard"
         app:layout_constraintEnd_toEndOf="@+id/tvAdd"
         app:layout_constraintStart_toStartOf="@+id/tvAdd"

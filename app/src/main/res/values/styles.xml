@@ -2,12 +2,11 @@
 <resources>
 
     <style name="actionKeyStyle">
-        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/colorOrange</item>
-        <item name="android:textSize">34sp</item>
-        <item name="background">?selectableItemBackgroundBorderless</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:foreground">?selectableItemBackground</item>
     </style>
 
     <style name="Widget.App.ButtonStyle" parent="Widget.MaterialComponents.Button">
