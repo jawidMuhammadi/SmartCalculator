@@ -1,55 +1,53 @@
 package com.spotlightapps.simplecalculator.ui
 
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toolbar
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.spotlightapps.simplecalculator.R
+import com.spotlightapps.simplecalculator.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
-
+    private lateinit var navController: NavController
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        navController = findNavController(R.id.nav_host_fragment)
+
+        supportActionBar?.title = getString(R.string.calculator)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.calculatorFragment -> {
-                findNavController(R.id.nav_host_fragment).navigate(R.id.calculatorFragment)
+                if (navController.currentDestination?.id != R.id.calculatorFragment) {
+                    navController.popBackStack()
+                    navController.navigate(R.id.calculatorFragment)
+                    supportActionBar?.title = getString(R.string.calculator)
+                }
                 true
             }
             R.id.exchangeFragment -> {
-                findNavController(R.id.nav_host_fragment).navigate(R.id.exchangeFragment)
+                if (navController.currentDestination?.id != R.id.exchangeFragment) {
+                    navController.popBackStack()
+                    navController.navigate(R.id.exchangeFragment)
+                    supportActionBar?.title = getString(R.string.converter)
+                }
                 true
             }
             else -> onNavigateUp()
