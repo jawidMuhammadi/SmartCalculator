@@ -107,7 +107,7 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
                 currentOperand.length
             )
             if (currentOperand.isNotEmpty() && latestOperator != null) {
-                leftOperand = resultList[resultList.lastIndex]
+                if (resultList.isNotEmpty()) leftOperand = resultList[resultList.lastIndex]
                 performOperation(latestOperator!!)
             } else {
                 if (latestOperator == null) {
@@ -144,5 +144,17 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
                 operatorsList[operatorsList.lastIndex]
             } else null
         }
+    }
+
+    fun onClearClicked() {
+        operandList = LinkedList()
+        operatorsList = LinkedList()
+        resultList = LinkedList()
+        _result.value = ""
+        _expression.value = ""
+        currentOperand = ""
+        leftOperand = ""
+        latestOperator = null
+        isAllowOperatorSign = false
     }
 }

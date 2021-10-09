@@ -71,9 +71,14 @@ class CalculatorFragment : Fragment() {
             tvPercent.setOnClickListener {
                 vieModel.addOperatorOnExpression(tvPercent.text.toString(), OperatorType.PERCENT)
             }
-
             ivBackSpace.setOnClickListener {
                 vieModel.onBackspaceClicked()
+            }
+            tvEqual.setOnClickListener {
+
+            }
+            tvClear.setOnClickListener {
+                vieModel.onClearClicked()
             }
         }
     }
