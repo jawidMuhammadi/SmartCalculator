@@ -9,7 +9,7 @@
 
 # Project Description:
 
-This is a none scientific smart calculator and currency converter Android App that has been created following MVVM architecture and modern android development best practices
+This is a none scientific smart calculator and currency converter Android App that has been created following MVVM repository architecture pattern and modern android development tools and best practices with a clean and user friendly UI.
 
 ## Screenshots:
 
