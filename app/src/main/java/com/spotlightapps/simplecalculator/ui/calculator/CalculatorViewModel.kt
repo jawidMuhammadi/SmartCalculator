@@ -81,9 +81,12 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
 
     private fun calculatePercentage() {
         val isExpressionDecimal = (currentOperand.contains(".") || leftOperand.contains("."))
-        currentOperand = if (isExpressionDecimal || isValueOdd(currentOperand)) {
+
+        currentOperand = if (isExpressionDecimal ||
+            currentOperand.toInt().rem(100) != 0
+        ) {
             currentOperand.toDouble().div(100.0).toString()
-        } else currentOperand.toInt().div(100.0).toString()
+        } else currentOperand.toInt().div(100).toString()
 
         if (latestOperator != null) {
             performOperation(latestOperator!!)
@@ -97,9 +100,11 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
         _result.value = when (operatorType) {
 
             OperatorType.DIVIDE -> {
-                if (isExpressionDecimal) {
-                    leftOperand.toBigDecimal().div(currentOperand.toBigDecimal()).toString()
-                } else leftOperand.toInt().div(currentOperand.toInt()).toString()
+                if (isExpressionDecimal || leftOperand.toInt().rem(currentOperand.toInt()) != 0) {
+                    leftOperand.toDouble().div(currentOperand.toDouble()).toString()
+                } else {
+                    leftOperand.toInt().div(currentOperand.toInt()).toString()
+                }
             }
 
             OperatorType.ADD -> {

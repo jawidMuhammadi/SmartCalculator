@@ -36,8 +36,3 @@ fun calculateExchangeToRateValue(
     val amountEuro = fromAmount.div(fromRate)
     return amountEuro.times(toRate)
 }
-
-fun isValueOdd(value: String): Boolean {
-    val oddNumber = listOf("1", "3", "5", "7", "9")
-    return oddNumber.contains(value[value.length-1])
-}
