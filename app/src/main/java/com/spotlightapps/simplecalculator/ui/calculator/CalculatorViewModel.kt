@@ -66,10 +66,10 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun addOperatorOnExpression(operatorSign: String?, operatorType: OperatorType) {
+    fun addOperatorOnExpression(operatorType: OperatorType) {
         if (isAllowEnteringOperatorSign && _expression.value != null) {
-            _expression.value += operatorSign
-            if (operatorSign != "%") {
+            _expression.value += operatorType.sign
+            if (operatorType.sign != OperatorType.PERCENT.sign) {
                 operatorList.add(operatorType)
                 latestOperator = operatorType
                 leftOperand = result.value!!

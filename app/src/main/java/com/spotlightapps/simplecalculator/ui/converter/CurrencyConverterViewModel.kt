@@ -50,8 +50,7 @@ class CurrencyConverterViewModel @Inject constructor(
         viewModelScope.launch {
             _apiCallStatus.value = ApiCallStatus.PROGRESS
             try {
-                val symbolsResponse =
-                    appRepository.getCountrySymbolsAsync().await()
+                val symbolsResponse = appRepository.getCountrySymbolsAsync().await()
                 _symbols.value = symbolsResponse?.symbols
                 getRatesList()
             } catch (e: Exception) {

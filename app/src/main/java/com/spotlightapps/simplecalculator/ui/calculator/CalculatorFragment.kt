@@ -79,7 +79,7 @@ class CalculatorFragment : Fragment() {
 
         viewModel.historyItem.observe(viewLifecycleOwner, {
             historyAdapter.addNewItem(it)
-            //Scroll to latest added history
+            //Scroll to the latest history
             binding.rvHistory.scrollToPosition(0)
         })
 
@@ -91,19 +91,19 @@ class CalculatorFragment : Fragment() {
     private fun setClickListeners() {
         binding.apply {
             tvAdd.setOnClickListener {
-                viewModel.addOperatorOnExpression(tvAdd.text.toString(), OperatorType.ADD)
+                viewModel.addOperatorOnExpression(OperatorType.ADD)
             }
             tvMinus.setOnClickListener {
-                viewModel.addOperatorOnExpression(tvMinus.text.toString(), OperatorType.MINUS)
+                viewModel.addOperatorOnExpression(OperatorType.MINUS)
             }
             tvMultiply.setOnClickListener {
-                viewModel.addOperatorOnExpression(tvMultiply.text.toString(), OperatorType.MULTIPLY)
+                viewModel.addOperatorOnExpression(OperatorType.MULTIPLY)
             }
             tvDivide.setOnClickListener {
-                viewModel.addOperatorOnExpression(tvDivide.text.toString(), OperatorType.DIVIDE)
+                viewModel.addOperatorOnExpression(OperatorType.DIVIDE)
             }
             tvPercent.setOnClickListener {
-                viewModel.addOperatorOnExpression(tvPercent.text.toString(), OperatorType.PERCENT)
+                viewModel.addOperatorOnExpression(OperatorType.PERCENT)
             }
             ivBackSpace.setOnClickListener {
                 if (viewModel.isErrorDisplayed) {
