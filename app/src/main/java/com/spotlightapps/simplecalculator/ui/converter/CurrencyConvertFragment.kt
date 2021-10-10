@@ -150,10 +150,10 @@ class CurrencyConvertFragment : Fragment() {
             }
         })
         viewModel.toAmount.observe(viewLifecycleOwner, {
-            binding.etTo.setText(String.format("%.2f", it))
+            binding.etTo.setText(String.format("%.4f", it))
         })
         viewModel.fromAmount.observe(viewLifecycleOwner, {
-            binding.etFrom.setText(String.format("%.2f", it))
+            binding.etFrom.setText(String.format("%.4f", it))
         })
         viewModel.apiCallStatus.observe(viewLifecycleOwner, {
             when (it) {
