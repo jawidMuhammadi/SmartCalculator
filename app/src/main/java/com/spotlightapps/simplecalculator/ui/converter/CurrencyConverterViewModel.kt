@@ -38,11 +38,11 @@ class CurrencyConverterViewModel @Inject constructor(
     private var _selectedToRateItem = MutableLiveData<RateSymbolItem?>()
     val selectedToRateSymbolItem: LiveData<RateSymbolItem?> = _selectedToRateItem
 
-    private var _fromAmount = MutableLiveData<Double>()
-    val fromAmount: LiveData<Double> = _fromAmount
+    private var _fromAmount = MutableLiveData<String>()
+    val fromAmount: LiveData<String> = _fromAmount
 
-    private var _toAmount = MutableLiveData<Double>()
-    val toAmount: LiveData<Double> = _toAmount
+    private var _toAmount = MutableLiveData<String>()
+    val toAmount: LiveData<String> = _toAmount
 
     private var _apiCallStatus = MutableLiveData<ApiCallStatus>()
     val apiCallStatus: LiveData<ApiCallStatus> = _apiCallStatus
@@ -90,8 +90,8 @@ class CurrencyConverterViewModel @Inject constructor(
             rate = ratesMap["AFN"],
             countryName = "Afghanistan"
         )
-        calculateFromToValue(1.0)
-        _fromAmount.value = 1.0
+        calculateFromToValue("1")
+        _fromAmount.value = "1"
     }
 
     fun onSymbolItemSelected(symbolItem: SymbolItem, isFromItem: Boolean) {
@@ -108,16 +108,16 @@ class CurrencyConverterViewModel @Inject constructor(
                 countryName = symbolItem.countryName
             )
         }
-        _fromAmount.value = 1.0
+        _fromAmount.value = "1"
         calculateFromToValue(_fromAmount.value!!)
     }
 
-    fun calculateFromToValue(newValue: Double) {
+    fun calculateFromToValue(newValue: String) {
         _toAmount.value = calculateExchangeToRateValue(
             fromRate = _selectedFromRateItem.value?.rate!!,
             toRate = _selectedToRateItem.value?.rate!!,
-            fromAmount = newValue
-        )
+            fromAmount = newValue.toDouble()
+        ).toString()
     }
 
     fun calculateToFromValue(newValue: Double) {
@@ -125,6 +125,6 @@ class CurrencyConverterViewModel @Inject constructor(
             fromRate = _selectedToRateItem.value?.rate!!,
             toRate = _selectedFromRateItem.value?.rate!!,
             fromAmount = newValue
-        )
+        ).toString()
     }
 }

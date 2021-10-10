@@ -39,6 +39,19 @@ class CurrencyConvertFragment : Fragment() {
         initObservers()
         viewModel.getSymbolList()
 
+        binding.etFrom.requestFocus()
+        binding.etFrom.background = ResourcesCompat.getDrawable(
+            resources,
+            R.drawable.edit_text_active_border,
+            null
+        )
+
+        setClickListeners()
+
+        setTouchListeners()
+    }
+
+    private fun setClickListeners() {
         binding.apply {
             cvFrom.setOnClickListener {
                 displayBottomSheetDialog(true)
@@ -51,12 +64,13 @@ class CurrencyConvertFragment : Fragment() {
                 override fun onKeyClicked(value: String) {
                     if (etFrom.hasFocus()) {
                         val currentValue = etFrom.text.toString()
+                        if (value == "." && currentValue.contains(".")) return
                         val newValue = currentValue + value
                         etFrom.setText(newValue)
-                        viewModel.calculateFromToValue(newValue.toDouble())
-                    }
-                    if (etTo.hasFocus()) {
+                        viewModel.calculateFromToValue(newValue.toDouble().toString())
+                    } else {
                         val currentValue = etTo.text.toString()
+                        if (value == "." && currentValue.contains(".")) return
                         val newValue = currentValue + value
                         etTo.setText(newValue)
                         viewModel.calculateToFromValue(newValue.toDouble())
@@ -71,7 +85,9 @@ class CurrencyConvertFragment : Fragment() {
                             currentValue.length - 1, currentValue.length
                         )
                         etFrom.setText(newValue)
-                        if (newValue.isNotEmpty()) viewModel.calculateFromToValue(newValue.toDouble())
+                        if (newValue.isNotEmpty()) viewModel.calculateFromToValue(
+                            newValue.toDouble().toString()
+                        )
                     }
                 }
                 if (etTo.hasFocus()) {
@@ -90,7 +106,6 @@ class CurrencyConvertFragment : Fragment() {
                 etFrom.setText("")
             }
         }
-        setTouchListeners()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -150,10 +165,18 @@ class CurrencyConvertFragment : Fragment() {
             }
         })
         viewModel.toAmount.observe(viewLifecycleOwner, {
-            binding.etTo.setText(String.format("%.4f", it))
+            if (it.contains(".")) {
+                binding.etTo.setText(String.format("%.2f", it.toDouble()))
+            } else {
+                binding.etTo.setText(it)
+            }
         })
         viewModel.fromAmount.observe(viewLifecycleOwner, {
-            binding.etFrom.setText(String.format("%.4f", it))
+            if (it.contains(".")) {
+                binding.etFrom.setText(String.format("%.2f", it.toDouble()))
+            } else {
+                binding.etFrom.setText(it)
+            }
         })
         viewModel.apiCallStatus.observe(viewLifecycleOwner, {
             when (it) {
