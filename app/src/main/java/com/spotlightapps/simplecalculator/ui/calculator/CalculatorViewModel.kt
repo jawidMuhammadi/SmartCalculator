@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.spotlightapps.simplecalculator.model.HistoryItem
+import com.spotlightapps.simplecalculator.utils.isValueOdd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
@@ -40,7 +41,7 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     var isEqualButtonClicked = false
 
     fun addNewValue(value: String) {
-        if (isEqualButtonClicked) {
+        if (isEqualButtonClicked && !_expression.value.isNullOrEmpty()) {
             addExpressionToHistory()
         }
         if (value == ".") {
@@ -63,25 +64,37 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     fun addOperatorOnExpression(operatorSign: String?, operatorType: OperatorType) {
         if (isAllowEnteringOperatorSign) {
             _expression.value += operatorSign
-            operatorList.add(operatorType)
-            latestOperator = operatorType
-            leftOperand = result.value!!
-            resultList.add(leftOperand)
-            operandList.add(currentOperand)
-            currentOperand = ""
-            isAllowEnteringOperatorSign = false
+            if (operatorSign != "%") {
+                operatorList.add(operatorType)
+                latestOperator = operatorType
+                leftOperand = result.value!!
+                resultList.add(leftOperand)
+                operandList.add(currentOperand)
+                currentOperand = ""
+                isAllowEnteringOperatorSign = false
+            } else {
+                calculatePercentage()
+            }
         }
 
+    }
+
+    private fun calculatePercentage() {
+        val isExpressionDecimal = (currentOperand.contains(".") || leftOperand.contains("."))
+        currentOperand = if (isExpressionDecimal || isValueOdd(currentOperand)) {
+            currentOperand.toDouble().div(100.0).toString()
+        } else currentOperand.toInt().div(100.0).toString()
+
+        if (latestOperator != null) {
+            performOperation(latestOperator!!)
+        } else {
+            _result.value = currentOperand
+        }
     }
 
     private fun performOperation(operatorType: OperatorType) {
         val isExpressionDecimal = (currentOperand.contains(".") || leftOperand.contains("."))
         _result.value = when (operatorType) {
-            OperatorType.PERCENT -> {
-                if (isExpressionDecimal) {
-                    leftOperand.toBigDecimal().rem(currentOperand.toBigDecimal()).toString()
-                } else leftOperand.toInt().rem(currentOperand.toInt()).toString()
-            }
 
             OperatorType.DIVIDE -> {
                 if (isExpressionDecimal) {
@@ -106,6 +119,8 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
                     leftOperand.toBigDecimal().times(currentOperand.toBigDecimal()).toString()
                 } else leftOperand.toInt().times(currentOperand.toInt()).toString()
             }
+            else -> ""
+
         }
     }
 
