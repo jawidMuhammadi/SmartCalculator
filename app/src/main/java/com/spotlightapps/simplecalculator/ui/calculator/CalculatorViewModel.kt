@@ -61,7 +61,7 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     }
 
     fun addOperatorOnExpression(operatorSign: String?, operatorType: OperatorType) {
-        if (isAllowEnteringOperatorSign) {
+        if (isAllowEnteringOperatorSign && _expression.value != null) {
             _expression.value += operatorSign
             if (operatorSign != "%") {
                 operatorList.add(operatorType)
@@ -147,9 +147,12 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
             }
 
             val operands = _expression.value!!
-            _expression.value = operands.removeRange(
-                operands.length - 1, operands.length
-            )
+            _expression.value = if (operands.length >= 2) {
+                operands.removeRange(
+                    operands.length - 1, operands.length
+                )
+            } else ""
+
         } else {
             _expression.value?.let {
                 if (it.length > 1) {
