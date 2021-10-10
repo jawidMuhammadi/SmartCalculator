@@ -5,12 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.spotlightapps.simplecalculator.data.AppRepository
 import com.spotlightapps.simplecalculator.model.RateSymbolItem
 import com.spotlightapps.simplecalculator.model.SymbolItem
-import com.spotlightapps.simplecalculator.model.rate.RatesResponse
 import com.spotlightapps.simplecalculator.model.symbol.Symbols
-import com.spotlightapps.simplecalculator.network.ApiCallStatus
-import com.spotlightapps.simplecalculator.network.BaseApiManager
+import com.spotlightapps.simplecalculator.data.remote.ApiCallStatus
 import com.spotlightapps.simplecalculator.utils.calculateExchangeToRateValue
 import com.spotlightapps.simplecalculator.utils.getRatesInMapFromJsonObject
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CurrencyConverterViewModel @Inject constructor(
-    private val baseApiManager: BaseApiManager
+    private val appRepository: AppRepository
 ) : ViewModel() {
 
     private var _symbols = MutableLiveData<Symbols?>()
@@ -52,7 +51,7 @@ class CurrencyConverterViewModel @Inject constructor(
             _apiCallStatus.value = ApiCallStatus.PROGRESS
             try {
                 val symbolsResponse =
-                    baseApiManager.currencyRateService.getCountrySymbolsAsync().await()
+                    appRepository.getCountrySymbolsAsync().await()
                 _symbols.value = symbolsResponse?.symbols
                 getRatesList()
             } catch (e: Exception) {
@@ -65,8 +64,7 @@ class CurrencyConverterViewModel @Inject constructor(
     private fun getRatesList() {
         viewModelScope.launch {
             try {
-                val rateResponse =
-                    baseApiManager.currencyRateService.getExchangeRatesAsync().await()
+                val rateResponse = appRepository.getExchangeRatesAsync().await()
                 ratesMap = getRatesInMapFromJsonObject(
                     Gson().toJson(rateResponse?.rates)
                 ).toMutableMap()

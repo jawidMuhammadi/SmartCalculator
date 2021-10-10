@@ -1,4 +1,4 @@
-package com.spotlightapps.simplecalculator.network
+package com.spotlightapps.simplecalculator.data.remote
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
@@ -24,7 +24,7 @@ const val CONTENT_TYPE = "Content-Type"
 const val ACCEPT = "Accept"
 const val ACCESS_KEY = "access_key"
 
-class BaseApiManager @Inject constructor() : Interceptor {
+class ApiManager @Inject constructor() : Interceptor {
 
     private lateinit var retrofit: Retrofit
     var currencyRateService: CurrencyRateService

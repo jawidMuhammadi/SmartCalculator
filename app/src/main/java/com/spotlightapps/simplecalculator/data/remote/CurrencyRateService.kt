@@ -1,4 +1,4 @@
-package com.spotlightapps.simplecalculator.network
+package com.spotlightapps.simplecalculator.data.remote
 
 import com.spotlightapps.simplecalculator.model.rate.RatesResponse
 import com.spotlightapps.simplecalculator.model.symbol.SymbolsResponse

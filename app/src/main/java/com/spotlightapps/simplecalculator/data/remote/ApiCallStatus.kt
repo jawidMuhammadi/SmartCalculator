@@ -1,4 +1,4 @@
-package com.spotlightapps.simplecalculator.network
+package com.spotlightapps.simplecalculator.data.remote
 
 /**
  * Created by Ahmad Jawid Muhammadi
