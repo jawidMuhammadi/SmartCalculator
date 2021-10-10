@@ -5,10 +5,10 @@ package com.spotlightapps.simplecalculator.ui.calculator
  * on 06-10-2021.
  */
 
-enum class OperatorType {
-    DIVIDE,
-    ADD,
-    MINUS,
-    PERCENT,
-    MULTIPLY
+enum class OperatorType constructor(val sign: String) {
+    DIVIDE("÷"),
+    ADD("+"),
+    MINUS("−"),
+    PERCENT("%"),
+    MULTIPLY("×")
 }

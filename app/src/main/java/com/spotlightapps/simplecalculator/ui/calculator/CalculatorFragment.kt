@@ -82,6 +82,10 @@ class CalculatorFragment : Fragment() {
             //Scroll to latest added history
             binding.rvHistory.scrollToPosition(0)
         })
+
+        viewModel.errorMessage.observe(viewLifecycleOwner, {
+            showErrorMessage(getString(it))
+        })
     }
 
     private fun setClickListeners() {
@@ -102,6 +106,10 @@ class CalculatorFragment : Fragment() {
                 viewModel.addOperatorOnExpression(tvPercent.text.toString(), OperatorType.PERCENT)
             }
             ivBackSpace.setOnClickListener {
+                if (viewModel.isErrorDisplayed) {
+                    removeErrorMessage()
+                    viewModel.isErrorDisplayed = false
+                }
                 viewModel.onBackspaceClicked()
             }
             tvEqual.setOnClickListener {
@@ -128,6 +136,11 @@ class CalculatorFragment : Fragment() {
                 } else {
                     historyAdapter.clearHistory()
                     tvClear.text = getString(R.string.clear_sign)
+                }
+
+                if (viewModel.isErrorDisplayed) {
+                    removeErrorMessage()
+                    viewModel.isErrorDisplayed = false
                 }
             }
         }
@@ -156,6 +169,23 @@ class CalculatorFragment : Fragment() {
                 ResourcesCompat.getColor(
                     resources, R.color.grey_700, null
                 )
+            )
+        }
+    }
+
+    private fun showErrorMessage(message: String) {
+        binding.tvResult.apply {
+            text = message
+            setTextColor(
+                ResourcesCompat.getColor(resources, android.R.color.holo_red_dark, null)
+            )
+        }
+    }
+
+    private fun removeErrorMessage() {
+        binding.tvResult.apply {
+            setTextColor(
+                ResourcesCompat.getColor(resources, R.color.grey_700, null)
             )
         }
     }

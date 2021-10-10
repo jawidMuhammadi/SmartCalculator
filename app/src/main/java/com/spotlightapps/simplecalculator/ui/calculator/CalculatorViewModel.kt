@@ -3,6 +3,7 @@ package com.spotlightapps.simplecalculator.ui.calculator
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.spotlightapps.simplecalculator.R
 import com.spotlightapps.simplecalculator.model.HistoryItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
@@ -29,6 +30,10 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     private var _historyItem = MutableLiveData<HistoryItem>()
     val historyItem: LiveData<HistoryItem> = _historyItem
 
+    private var _errorMessage = MutableLiveData<Int>()
+    val errorMessage: LiveData<Int> = _errorMessage
+    var isErrorDisplayed: Boolean = false
+
     private var currentOperand: String = ""
 
     private var leftOperand: String = ""
@@ -38,6 +43,7 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     private var isAllowEnteringOperatorSign = false
 
     var isEqualButtonClicked = false
+
 
     fun addNewValue(value: String) {
         if (isEqualButtonClicked && !_expression.value.isNullOrEmpty()) {
@@ -95,6 +101,8 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun performOperation(operatorType: OperatorType) {
+        if (!isDataValid()) return
+
         val isExpressionDecimal = (currentOperand.contains(".") || leftOperand.contains("."))
         _result.value = when (operatorType) {
 
@@ -128,6 +136,14 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    private fun isDataValid(): Boolean {
+        return if (currentOperand == "0" && latestOperator == OperatorType.DIVIDE) {
+            _errorMessage.value = R.string.error_message_div_zero
+            isErrorDisplayed = true
+            false
+        } else true
+    }
+
     fun onBackspaceClicked() {
         if (currentOperand.isNotEmpty()) {
             currentOperand = currentOperand.removeRange(
@@ -141,7 +157,7 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
                 if (latestOperator == null) {
                     leftOperand = currentOperand
                 } else {
-                    resultList.removeLast()
+                    if (resultList.isNotEmpty()) resultList.removeLast()
                 }
                 _result.value = leftOperand
             }

@@ -20,5 +20,6 @@
     <string name="all_clear">AC</string>
     <string name="calculator">Calculator</string>
     <string name="converter">Currency Converter</string>
+    <string name="error_message_div_zero">Can\'t divide by 0!</string>
 
 </resources>
