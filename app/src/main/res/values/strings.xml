@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SimpleCalculator</string>
+    <string name="app_name">Smart Calculator</string>
     <string name="action_settings">Settings</string>
 
     <string name="clear_sign" translatable="false">C</string>
