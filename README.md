@@ -11,6 +11,8 @@
 
 This is a none scientific smart calculator and currency converter Android App that has been created following MVVM repository architecture pattern and modern android development tools and best practices with a clean and user friendly UI.
 
+- To see a demo, download the **Android Debug APK** from [here](https://drive.google.com/file/d/1hM1tcXdoo0IRyTmNoHCguKWowipzNjkD/view?usp=sharing).
+
 ## Screenshots:
 
 
