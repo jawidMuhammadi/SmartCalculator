@@ -17,7 +17,7 @@ This is a none scientific smart calculator and currency converter Android App th
 - **Coroutines**: Multithreading and asynchronous API Call (Deferred and Await)
 - **Hilt**: Dependency injection
 - **Retrofit, OkHttp, Gson and Kotlin Coroutines Adapter**: Networking
-- **LiveData**: Observerve data to update UI
+- **LiveData**: Observe data to update UI
 - **Shimmer**: Showing loading shimmer effect
 - **MVVM**: Architecture of the project
 - **JUnit**: Unit Testing
