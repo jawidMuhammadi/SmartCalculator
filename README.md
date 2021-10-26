@@ -13,6 +13,19 @@ This is a none scientific smart calculator and currency converter Android App th
 
 - To see a demo, download the **Android Debug APK** from [here](https://drive.google.com/file/d/1hM1tcXdoo0IRyTmNoHCguKWowipzNjkD/view?usp=sharing).
 
+## Libraries and Project Architecture:
+- **Coroutines**: Multithreading and asynchronous API Call (Deferred and Await)
+- **Hilt**: Dependency injection
+- **Retrofit, OkHttp, Gson and Kotlin Coroutines Adapter**: Networking
+- **LiveData**: Observerve data to update UI
+- **Shimmer**: Showing loading shimmer effect
+- **MVVM**: Architecture of the project
+- **JUnit**: Unit Testing
+- **Navigation**
+- **Custom Views**
+- **View Binding**
+
+
 ## Screenshots:
 
 
